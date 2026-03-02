@@ -26,6 +26,12 @@ const sequelize = new Sequelize(
 
 const connectDB = async () => {
   try {
+    console.log('Connecting to MySQL...');
+    console.log('Host:', process.env.DB_HOST);
+    console.log('Port:', process.env.DB_PORT);
+    console.log('Database:', process.env.DB_NAME);
+    console.log('User:', process.env.DB_USER);
+    
     await sequelize.authenticate();
     console.log('MySQL Database Connected successfully.');
     
@@ -34,7 +40,7 @@ const connectDB = async () => {
       await sequelize.sync({ force: false, alter: false });
       console.log('Database models synchronized.');
     } catch (syncError) {
-      console.warn('Database sync warning (tables may already exist):', syncError.message);
+      console.warn('Database sync warning:', syncError.message);
     }
   } catch (error) {
     console.error('Unable to connect to the database:', error.message);

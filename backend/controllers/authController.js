@@ -6,10 +6,12 @@ const User = require('../models/User');
 // Register new user
 const register = async (req, res) => {
   try {
+    console.log('Register attempt:', req.body);
     const { username, email, phone, password } = req.body;
 
     // Validate inputs
     if (!username || !email || !password) {
+      console.log('Missing required fields');
       return res.status(400).json({ message: 'Username, email, and password are required' });
     }
 
@@ -55,7 +57,8 @@ const register = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('Registration error details:', error);
+    console.error('Error stack:', error.stack);
     res.status(500).json({ message: 'Server error during registration: ' + error.message });
   }
 };
