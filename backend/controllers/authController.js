@@ -94,10 +94,11 @@ const login = async (req, res) => {
     );
 
     // Send token as HTTP-only cookie
+    const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: isProduction, // Must be true for cross-domain cookies in production
+      sameSite: isProduction ? 'none' : 'lax', // 'none' required for cross-domain cookies
       maxAge: 24 * 60 * 60 * 1000 // 1 day
     });
 
@@ -118,10 +119,11 @@ const login = async (req, res) => {
 
 // Logout user
 const logout = (req, res) => {
+  const isProduction = process.env.NODE_ENV === 'production';
   res.clearCookie('token', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax'
   });
   res.json({ message: 'Logout successful' });
 };
