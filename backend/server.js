@@ -19,6 +19,12 @@ const app = express();
 
 function startServer() {
 
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin}`);
+  next();
+});
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
